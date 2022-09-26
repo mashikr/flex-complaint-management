@@ -1,0 +1,92 @@
+list command:
+
+ls
+ls -l / ll
+ls -i
+ls -a
+
+creating file:
+cat>filename  (create and list file with content)
+cat "Some text here." > filename
+touch filename (create an empty file)
+
+echo>filename
+echo text > filename.ext
+
+move or copy:
+mv location1 location2
+cp loc1 loc2
+mv -i oldname new name (rename file)
+
+display file content:
+
+cat (display content file)
+wc (word/letter count)
+cat filename
+wc filename
+wc -l filename (for line)
+wc -w filename (for word)
+wc -c filename (for letter)
+
+remove file:
+
+rm filename
+rm filename filename ...
+rm *
+
+directory manage:
+
+cd (change directory)
+mkdir (make directory)
+ls -la (details about hidden files/directories)
+Dot (.) (current working directory)
+Double dot (..) (immediate parent directory)
+rmdir (remove)
+cd dirname
+cd..
+~ (home directory)
+cd - (last working direktory)
+cd ~ (change home directory)
+pwd (present working directory)
+
+change permission:
+
+r - read
+w - write
+x - execute
+
+u - owner
+g - group
+o - others
+
++ - add permission
+- - remove permission
+= - set permission 
+
+	(-/d owner group others)
+for file(-rwx rwx rwx)
+for dir(drwx rwx rwx)
+chmod u+x filename (add cexcute permission for owner)
+chmod g-w filename (remove write permission for group)
+chmod u-w,g+w filename
+chmod o-rx filename (remove read,execute permission at a time)
+chmod u=rwx,g=rx,o=r filename (set permission)
+
+octal mode:
+
+--- 0 - no permission
+--x 1 - execute permission
+-w- 2 - write permission
+-wx 3 - 1+2 execute and write permission
+r-- 4 - read permission
+r-x 5 - 4+1 read and execute permission
+rw- 6 - 4+2 read and write permission
+rwx 7 - 4+2+1 read, write and execution permission
+
+chmode 560 filename
+
+
+
+
+
+
