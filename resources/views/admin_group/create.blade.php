@@ -8,23 +8,23 @@
                 <div class="iq-card">
                     <div class="iq-card-header d-flex justify-content-between">
                         <div class="iq-header-title">
-                            <h4 class="card-title">Update Group</h4>
+                            <h4 class="card-title">Create Admin Group</h4>
                         </div>
                     </div>
                     <div class="iq-card-body">
-                       <form action="{{ route("group.update", ['id' => $group->crgid ])}}" method="post">
+                       <form action="{{ route("admin.group.store") }}" method="post">
                             @csrf
-                            <input type="hidden" name="_method" value="PUT">
+                            <input type="hidden" class="form-control" name="id" value="{{ $new_id }}">
                             <div class="form-group">
                                 <label for="name">Name</label>
-                                <input type="text" class="form-control  @error('name') is-invalid @enderror" name="name" id="name" value="{{ $group->crgname }}">
+                                <input type="text" class="form-control  @error('name') is-invalid @enderror" name="name" id="name" value="{{ old('name') }}">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" cols="" rows="">{{ $group->description }}</textarea>
+                                <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" cols="" rows="">{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -32,12 +32,12 @@
                             <div class="form-group">
                                 <label for="status">Status</label>
                                 <select class="form-control" name="status" id="status">
-                                    <option @if($group->status =='active') selected @endif value="active">Active</option>
-                                    <option @if($group->status =='inactive') selected @endif value="inactive">Inactive</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="{{ route('group.index') }}" class="btn iq-bg-danger">cancle</a>
+                            <a href="{{ route('admin.group.index') }}" class="btn iq-bg-danger">cancle</a>
                        </form>
                     </div>
                        

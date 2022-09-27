@@ -46,13 +46,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/complains', 'ComplainController@adminIndex')->name('admin.complain');
     Route::get('/complains/user/{user_id}', 'ComplainController@individualMsg')->name('admin.individual.msg');
 
-    Route::prefix('group')->group(function () {
-        Route::get('/', 'GroupController@index')->name('group.all');
-        Route::get('/create', 'GroupController@create')->name('group.create');
-        Route::post('/store', 'GroupController@store')->name('group.store');
-        Route::get('/edit/{id}', 'GroupController@edit')->name('group.edit');
-        Route::post('/update/{id}', 'GroupController@update')->name('group.update');
-        Route::get('/delete/{id}', 'GroupController@destroy')->name('group.destroy');
-    });
+    // Route::prefix('group')->group(function () {
+    //     Route::get('/', 'GroupController@index')->name('group.all');
+    //     Route::get('/create', 'GroupController@create')->name('group.create');
+    //     Route::post('/store', 'GroupController@store')->name('group.store');
+    //     Route::get('/edit/{id}', 'GroupController@edit')->name('group.edit');
+    //     Route::post('/update/{id}', 'GroupController@update')->name('group.update');
+    //     Route::get('/delete/{id}', 'GroupController@destroy')->name('group.destroy');
+    // });
+    Route::resource('group','GroupController')->parameters(['group' => 'id']);
+    Route::resource('admin/group','AdminGroupController',  ['as' => 'admin'])->parameters(['group' => 'id']);
+    Route::resource('region','RegionController')->parameters(['region' => 'id']);
 });
 /// Admin routes end ///

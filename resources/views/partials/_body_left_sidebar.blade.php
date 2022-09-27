@@ -30,10 +30,11 @@
                         ->addClass('iq-waves-effect'),
                     Menu::new()
                         ->addClass('iq-submenu')
-                        ->route('group.all', 'Group')
+                        ->route('group.index', 'Group')
+                        ->route('admin.group.index', 'Admin Group')
                         ->route('group.create', 'Category')
                         ->route('group.create', 'Clients')
-                        ->route('group.create', 'Region')
+                        ->route('region.index', 'Region')
                 )
 
 

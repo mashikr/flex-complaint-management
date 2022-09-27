@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DataTables\GroupDataTable;
-use App\Group;
+use App\Region;
 use Illuminate\Support\Facades\Validator;
 
-class GroupController extends Controller
+class RegionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class GroupController extends Controller
     {
         // return Group::all();
         $assets = ['datatable'];
-        return $dataTable->render('group.index', compact('assets'));
+        return $dataTable->render('admin_group.index', compact('assets'));
         //return view("crgroup.group");
     }
 
@@ -29,14 +29,14 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $new_id = Group::orderBy('crgid', 'desc')->first();
+        $new_id = Region::orderBy('diid', 'desc')->first();
         if($new_id) {
-            $new_id = $new_id->crgid;
+            $new_id = $new_id->diid;
         } else $new_id=0;
-        $new_id++;
-        $new_id = str_pad($new_id,2,"0", STR_PAD_LEFT);
+        $new_id++; 
+        $new_id = str_pad($new_id,8,"0", STR_PAD_LEFT);
 
-        return view("group.create", compact('new_id'));
+        return view("region.create", compact('new_id'));
     }
 
     /**
@@ -48,29 +48,33 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|max:2',
+            'id' => 'required',
             'name' => 'required',
-            'description' => 'required',
-            'status' => 'required',
+            'country' => 'required',
+            'city' => 'required',
         ]);
 
         if ($validator->fails()) {    
-            return redirect()->route("group.create")
+            return redirect()->route("region.create")
                             ->withErrors($validator)
                             ->withInput();
         } else {
-            Group::create([
-                'crgid' => $request->id,
-                'crgname' => $request->name,
-                'description' => $request->description,
-                'status' => $request->status,
+            Region::create([
+                'diid' => $request->id,
+                'diname' => $request->name,
+                'location' => $request->location,
+                'location' => $request->location,
+                'distance' => $request->distance,
+                'country' => $request->country,
+                'city' => $request->city,
+                'notes' => $request->notes,
                 'upstatus' => '',
                 'dnstatus' => 'NEW',
                 'usrid' => auth()->user()->id,
                 'bid' => 101
             ]);
 
-            return redirect()->route("group.index");
+            return redirect()->route("region.index");
         }
     }
 
@@ -93,8 +97,8 @@ class GroupController extends Controller
      */
     public function edit($id)
     {
-        $group = Group::where('crgid', $id)->first();
-        return view('group.edit', compact('group'));
+        $region = Region::where('diid', $id)->first();
+        return view('region.edit', compact('region'));
     }
 
     /**
@@ -108,24 +112,32 @@ class GroupController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'description' => 'required',
-            'status' => 'required',
+            'country' => 'required',
+            'city' => 'required',
         ]);
 
         if ($validator->fails()) {    
-            return redirect()->route("group.edit", ['id' => $id])
+            return redirect()->route("region.edit", ['id' => $id])
                             ->withErrors($validator)
                             ->withInput();
         } else {
-            $group = Group::where('crgid', $id)->first();
+            $group = Region::where('diid', $id)->first();
             $group->update([
-                'crgname' => $request->name,
-                'description' => $request->description,
-                'status' => $request->status,
+                'diid' => $request->id,
+                'diname' => $request->name,
+                'location' => $request->location,
+                'location' => $request->location,
+                'distance' => $request->distance,
+                'country' => $request->country,
+                'city' => $request->city,
+                'notes' => $request->notes,
+                'upstatus' => '',
                 'dnstatus' => 'CHANGED',
+                'usrid' => auth()->user()->id,
+                'bid' => 101
             ]);
 
-            return redirect()->route("group.index");
+            return redirect()->route("region.index");
         }
         
 
@@ -139,8 +151,8 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = Group::where('crgid', $id)->first();
+        $group = Region::where('diid', $id)->first();
         $group->delete();
-        return redirect()->route("group.index");
+        return redirect()->route("region.index");
     }
 }

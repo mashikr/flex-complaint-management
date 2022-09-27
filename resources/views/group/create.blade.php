@@ -37,7 +37,7 @@
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="{{ route('group.all') }}" class="btn iq-bg-danger">cancle</a>
+                            <a href="{{ route('group.index') }}" class="btn iq-bg-danger">cancle</a>
                        </form>
                     </div>
                        

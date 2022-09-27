@@ -12,12 +12,12 @@
                         </div>
                     </div>
                     <div class="iq-card-body">
-                       <form action="{{ route("group.update", ['id' => $group->crgid ])}}" method="post">
+                       <form action="{{ route("admin.group.update", ['id' => $group->creid ])}}" method="post">
                             @csrf
                             <input type="hidden" name="_method" value="PUT">
                             <div class="form-group">
                                 <label for="name">Name</label>
-                                <input type="text" class="form-control  @error('name') is-invalid @enderror" name="name" id="name" value="{{ $group->crgname }}">
+                                <input type="text" class="form-control  @error('name') is-invalid @enderror" name="name" id="name" value="{{ $group->crename }}">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -37,7 +37,7 @@
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="{{ route('group.index') }}" class="btn iq-bg-danger">cancle</a>
+                            <a href="{{ route('admin.group.index') }}" class="btn iq-bg-danger">cancle</a>
                        </form>
                     </div>
                        

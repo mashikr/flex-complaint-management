@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DataTables\GroupDataTable;
-use App\Group;
+use App\AdminGroup;
 use Illuminate\Support\Facades\Validator;
 
-class GroupController extends Controller
+class AdminGroupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class GroupController extends Controller
     {
         // return Group::all();
         $assets = ['datatable'];
-        return $dataTable->render('group.index', compact('assets'));
+        return $dataTable->render('admin_group.index', compact('assets'));
         //return view("crgroup.group");
     }
 
@@ -29,14 +29,14 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $new_id = Group::orderBy('crgid', 'desc')->first();
+        $new_id = AdminGroup::orderBy('creid', 'desc')->first();
         if($new_id) {
-            $new_id = $new_id->crgid;
+            $new_id = $new_id->creid;
         } else $new_id=0;
         $new_id++;
         $new_id = str_pad($new_id,2,"0", STR_PAD_LEFT);
 
-        return view("group.create", compact('new_id'));
+        return view("admin_group.create", compact('new_id'));
     }
 
     /**
@@ -55,13 +55,13 @@ class GroupController extends Controller
         ]);
 
         if ($validator->fails()) {    
-            return redirect()->route("group.create")
+            return redirect()->route("admin.group.create")
                             ->withErrors($validator)
                             ->withInput();
         } else {
-            Group::create([
-                'crgid' => $request->id,
-                'crgname' => $request->name,
+            AdminGroup::create([
+                'creid' => $request->id,
+                'crename' => $request->name,
                 'description' => $request->description,
                 'status' => $request->status,
                 'upstatus' => '',
@@ -70,7 +70,7 @@ class GroupController extends Controller
                 'bid' => 101
             ]);
 
-            return redirect()->route("group.index");
+            return redirect()->route("admin.group.index");
         }
     }
 
@@ -93,8 +93,8 @@ class GroupController extends Controller
      */
     public function edit($id)
     {
-        $group = Group::where('crgid', $id)->first();
-        return view('group.edit', compact('group'));
+        $group = AdminGroup::where('creid', $id)->first();
+        return view('admin_group.edit', compact('group'));
     }
 
     /**
@@ -113,22 +113,20 @@ class GroupController extends Controller
         ]);
 
         if ($validator->fails()) {    
-            return redirect()->route("group.edit", ['id' => $id])
+            return redirect()->route("admin.group.edit", ['id' => $id])
                             ->withErrors($validator)
                             ->withInput();
         } else {
-            $group = Group::where('crgid', $id)->first();
+            $group = AdminGroup::where('creid', $id)->first();
             $group->update([
-                'crgname' => $request->name,
+                'crename' => $request->name,
                 'description' => $request->description,
                 'status' => $request->status,
                 'dnstatus' => 'CHANGED',
             ]);
 
-            return redirect()->route("group.index");
+            return redirect()->route("admin.group.index");
         }
-        
-
     }
 
     /**
@@ -139,8 +137,8 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = Group::where('crgid', $id)->first();
+        $group = AdminGroup::where('creid', $id)->first();
         $group->delete();
-        return redirect()->route("group.index");
+        return redirect()->route("admin.group.index");
     }
 }
