@@ -18,7 +18,7 @@ class RegionController extends Controller
     {
         // return Group::all();
         $assets = ['datatable'];
-        return $dataTable->render('admin_group.index', compact('assets'));
+        return $dataTable->render('region.index', compact('assets'));
         //return view("crgroup.group");
     }
 
@@ -62,7 +62,6 @@ class RegionController extends Controller
             Region::create([
                 'diid' => $request->id,
                 'diname' => $request->name,
-                'location' => $request->location,
                 'location' => $request->location,
                 'distance' => $request->distance,
                 'country' => $request->country,
@@ -123,18 +122,13 @@ class RegionController extends Controller
         } else {
             $group = Region::where('diid', $id)->first();
             $group->update([
-                'diid' => $request->id,
                 'diname' => $request->name,
-                'location' => $request->location,
                 'location' => $request->location,
                 'distance' => $request->distance,
                 'country' => $request->country,
                 'city' => $request->city,
                 'notes' => $request->notes,
-                'upstatus' => '',
                 'dnstatus' => 'CHANGED',
-                'usrid' => auth()->user()->id,
-                'bid' => 101
             ]);
 
             return redirect()->route("region.index");

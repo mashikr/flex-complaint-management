@@ -11,7 +11,7 @@
                             <h4 class="card-title">Groups</h4>
                         </div>
                         <div class="iq-card-header-toolbar d-flex align-items-center">
-                            <a href="{{ route('group.create') }}" class="float-right mr-1 btn btn-sm btn-primary"><i class="fa fa-plus-circle"></i> {{ trans('messages.add_form_title',['form' => trans('messages.user')  ]) }}</a>
+                            <a href="{{ route('group.create') }}" class="float-right mr-1 btn btn-sm btn-primary"><i class="fa fa-plus-circle"></i> Add Group</a>
                         </div>
                     </div>
                     <div class="iq-card-body p-0">

@@ -8,10 +8,10 @@
                 <div class="iq-card">
                     <div class="iq-card-header d-flex justify-content-between">
                         <div class="iq-header-title">
-                            <h4 class="card-title">Admin Groups</h4>
+                            <h4 class="card-title">Teams</h4>
                         </div>
                         <div class="iq-card-header-toolbar d-flex align-items-center">
-                            <a href="{{ route('admin.group.create') }}" class="float-right mr-1 btn btn-sm btn-primary"><i class="fa fa-plus-circle"></i> Add Admin Group</a>
+                            <a href="{{ route('team.create') }}" class="float-right mr-1 btn btn-sm btn-primary"><i class="fa fa-plus-circle"></i> Add Team</a>
                         </div>
                     </div>
                     <div class="iq-card-body p-0">

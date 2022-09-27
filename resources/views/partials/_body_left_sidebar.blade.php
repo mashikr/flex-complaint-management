@@ -35,6 +35,7 @@
                         ->route('group.create', 'Category')
                         ->route('group.create', 'Clients')
                         ->route('region.index', 'Region')
+                        ->route('team.index', 'Team')
                 )
 
 

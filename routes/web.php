@@ -57,5 +57,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('group','GroupController')->parameters(['group' => 'id']);
     Route::resource('admin/group','AdminGroupController',  ['as' => 'admin'])->parameters(['group' => 'id']);
     Route::resource('region','RegionController')->parameters(['region' => 'id']);
+    Route::resource('team','TeamController')->parameters(['team' => 'id']);
 });
 /// Admin routes end ///
