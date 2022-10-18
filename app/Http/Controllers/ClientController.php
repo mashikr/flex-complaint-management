@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DataTables\GroupDataTable;
-use App\AdminGroup;
+use App\Client;
 use Illuminate\Support\Facades\Validator;
 
-class AdminGroupController extends Controller
+class ClientController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -18,7 +18,7 @@ class AdminGroupController extends Controller
     {
         // return Group::all();
         $assets = ['datatable'];
-        return $dataTable->render('admin_group.index', compact('assets'));
+        return $dataTable->render('client.index', compact('assets'));
         //return view("crgroup.group");
     }
 
@@ -30,20 +30,20 @@ class AdminGroupController extends Controller
     public function create($id=-1)
     {
         if($id == '-1'){
-            $pageTitle = 'Create Admin Group';
-            $new_id = AdminGroup::orderBy('creid', 'desc')->first();
+            $pageTitle = 'Create Client';
+                $new_id = Client::orderBy('crcid', 'desc')->first();
             if($new_id) {
-                $new_id = $new_id->creid;
+                $new_id = $new_id->crcid;
             } else $new_id=0;
-            $new_id++;
-            $new_id = str_pad($new_id,2,"0", STR_PAD_LEFT);
-            $group = new AdminGroup;
-            $group->creid = $new_id;
+            $new_id++; 
+            $new_id = str_pad($new_id,6,"0", STR_PAD_LEFT);
+            $client = new Client;
+            $client->crcid = $new_id;
         }else{
-            $pageTitle = 'Update Admin Group';
-            $group = AdminGroup::where('creid', $id)->first();
+            $pageTitle = 'Update Client';
+            $client = Client::where('crcid', $id)->first();
         }
-        return view('admin_group.create', compact('pageTitle' ,'group'));
+        return view('client.create', compact('pageTitle' ,'client'));
     }
 
     /**
@@ -56,14 +56,15 @@ class AdminGroupController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'creid' => 'required',
-            'crename' => 'required',
-            'description' => 'required',
-            'status' => 'required',
+            'crcid' => 'required',
+            'crcname' => 'required',
+            'designation' => 'required',
+            'mobile' => 'required',
+            'email' => 'required',
         ]);
 
         if ($validator->fails()) {    
-            return redirect()->route("admin_group.create")
+            return redirect()->route("client.create")
                             ->withErrors('errors', $validator->errors()->first())
                             ->withInput();
         } else {
@@ -71,15 +72,14 @@ class AdminGroupController extends Controller
             $data['dnstatus'] = 'CHANGED';
             $data['usrid'] = auth()->user()->id;
             $data['bid'] = 101;
-            $result = AdminGroup::updateOrCreate(['creid' => $data['creid'] ], $data);
+            $result = Client::updateOrCreate(['crcid' => $data['crcid'] ],$data);
     
-            $message = trans('messages.update_form',['form' => 'Admin Group']);
+            $message = trans('messages.update_form',['form' => 'Client']);
             if($result->wasRecentlyCreated){
-                AdminGroup::where('creid', $data['creid'])->update(['dnstatus' => 'NEW']);
-                $message = trans('messages.save_form',['form' => 'Admin Group']);
+                Client::where('crcid', $data['crcid'])->update(['dnstatus' => 'NEW']);
+                $message = trans('messages.save_form',['form' => 'Client']);
             }
-            return redirect(route('admin.group.index'))->withSuccess($message);
-
+            return redirect(route('client.index'))->withSuccess($message);
         }
     }
 
@@ -102,8 +102,8 @@ class AdminGroupController extends Controller
      */
     public function edit($id)
     {
-        // $group = AdminGroup::where('creid', $id)->first();
-        // return view('admin_group.edit', compact('group'));
+        // $client = Client::where('crcid', $id)->first();
+        // return view('client.edit', compact('client'));
     }
 
     /**
@@ -117,24 +117,32 @@ class AdminGroupController extends Controller
     {
         // $validator = Validator::make($request->all(), [
         //     'name' => 'required',
-        //     'description' => 'required',
-        //     'status' => 'required',
+        //     'designation' => 'required',
+        //     'mobile' => 'required',
+        //     'email' => 'required',
         // ]);
 
         // if ($validator->fails()) {    
-        //     return redirect()->route("admin.group.edit", ['id' => $id])
+        //     return redirect()->route("client.edit", ['id' => $id])
         //                     ->withErrors($validator)
         //                     ->withInput();
         // } else {
-        //     $group = AdminGroup::where('creid', $id)->first();
-        //     $group->update([
-        //         'crename' => $request->name,
-        //         'description' => $request->description,
+        //     $client = Client::where('crcid', $id)->first();
+        //     $client->update([
+        //         'crcname' => $request->name,
+        //         'designation' => $request->designation,
+        //         'city' => $request->city,
+        //         'country' => $request->country,
+        //         'mobile' => $request->mobile,
+        //         'email' => $request->email,
+        //         'notes' => $request->notes,
         //         'status' => $request->status,
+        //         'upstatus' => '',
+        //         'udate' => now(),
         //         'dnstatus' => 'CHANGED',
         //     ]);
 
-        //     return redirect()->route("admin.group.index");
+        //     return redirect()->route("client.index");
         // }
     }
 
@@ -146,8 +154,8 @@ class AdminGroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = AdminGroup::where('creid', $id)->first();
-        $group->delete();
-        return redirect()->route("admin.group.index");
+        $client = Client::where('crcid', $id)->first();
+        $client->delete();
+        return redirect()->route("client.index");
     }
 }

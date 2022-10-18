@@ -33,7 +33,7 @@
                         ->route('group.index', 'Group')
                         ->route('admin.group.index', 'Admin Group')
                         ->route('group.create', 'Category')
-                        ->route('group.create', 'Clients')
+                        ->route('client.index', 'Clients')
                         ->route('region.index', 'Region')
                         ->route('team.index', 'Team')
                 )

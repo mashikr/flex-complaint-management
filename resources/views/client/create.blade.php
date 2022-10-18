@@ -8,20 +8,15 @@
                 <div class="iq-card">
                     <div class="iq-card-header d-flex justify-content-between">
                         <div class="iq-header-title">
-                            <h4 class="card-title">{{ $pageTitle }}</h4>
+                            <h4 class="card-title">Create Client</h4>
                         </div>
                     </div>
                     <div class="iq-card-body">
-                    {{ Form::model($team,['method' => 'POST','route'=>'team.store', 'data-toggle'=>"validator" ,'id'=>'team'] ) }}
-                        {{ Form::hidden('eid') }}
+                        {{ Form::model($client,['method' => 'POST','route'=>'client.store', 'data-toggle'=>"validator" ,'id'=>'client'] ) }}
+                            {{ Form::hidden('crcid') }}
                             <div class="form-group">
-                                {{ Form::label('uname','Name'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                {{ Form::text('uname',old('uname'),['class' =>'form-control','required']) }}
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group">
-                                {{ Form::label('department','Department'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                {{ Form::text('department',old('department'),['class' =>'form-control','required']) }}
+                                {{ Form::label('crcname','Name'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                {{ Form::text('crcname',old('crcname'),['class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
                             <div class="form-group">
@@ -30,8 +25,13 @@
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
                             <div class="form-group">
-                                {{ Form::label('address','Address'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                {{ Form::text('address',old('address'),['class' =>'form-control','required']) }}
+                                {{ Form::label('city','City'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                {{ Form::text('city',old('city'),['class' =>'form-control','required']) }}
+                                <small class="help-block with-errors text-danger"></small>
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('country','Country'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                {{ Form::text('country',old('country'),['class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
                             <div class="form-group">
@@ -59,9 +59,9 @@
                                 {{ Form::select('status', ['active' => 'Active', 'inactive' => 'Inactive'], old('status'), [ 'id' => 'status' ,'class' =>'form-control select2js','required']) }}
                             </div>
                             {{ Form::submit('Submit', ['class'=>'btn btn-md btn-primary']) }}
-                            <a href="{{ route('team.index') }}" class="btn iq-bg-danger">cancle</a>
+                            <a href="{{ route('client.index') }}" class="btn iq-bg-danger">cancle</a>
                         {{ Form::close() }}
-                    </div>         
+                    </div> 
                 </div>
             </div>
         </div>

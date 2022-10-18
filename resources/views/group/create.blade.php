@@ -8,37 +8,36 @@
                 <div class="iq-card">
                     <div class="iq-card-header d-flex justify-content-between">
                         <div class="iq-header-title">
-                            <h4 class="card-title">Create Group</h4>
+                            <h4 class="card-title">{{ $pageTitle }}</h4>
                         </div>
                     </div>
                     <div class="iq-card-body">
-                       <form action="{{ route("group.store") }}" method="post">
-                            @csrf
-                            <input type="hidden" class="form-control" name="id" value="{{ $new_id }}">
+                        {{ Form::model($group,['method' => 'POST','route'=>'group.store', 'data-toggle'=>"validator" ,'id'=>'group'] ) }}
+                            {{ Form::hidden('crgid') }}
                             <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control  @error('name') is-invalid @enderror" name="name" id="name" value="{{ old('name') }}">
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                {{ Form::label('crgname','Name'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                {{ Form::text('crgname',old('crgname'),['class' =>'form-control','required']) }}
+                                <small class="help-block with-errors text-danger"></small>
                             </div>
                             <div class="form-group">
-                                <label for="description">Description</label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" cols="" rows="">{{ old('description') }}</textarea>
-                                @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                {{ Form::label('description','Description'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                {{ Form::textarea('description', null, [
+                                    'class'      => 'form-control',
+                                    'rows'       => 1, 
+                                    'name'       => 'description',
+                                    'id'         => 'description',
+                                    'required'   => 'required',
+                                ]) }}
+                                <small class="help-block with-errors text-danger"></small>
                             </div>
                             <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-control" name="status" id="status">
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                </select>
+                                {{ Form::label('status','Status'.' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                {{ Form::select('status', ['active' => 'Active', 'inactive' => 'Inactive'], old('status'), [ 'id' => 'status' ,'class' =>'form-control select2js','required']) }}
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            {{ Form::submit('Submit', ['class'=>'btn btn-md btn-primary']) }}
+
                             <a href="{{ route('group.index') }}" class="btn iq-bg-danger">cancle</a>
-                       </form>
+                        {{ Form::close() }}
                     </div>
                        
                 </div>

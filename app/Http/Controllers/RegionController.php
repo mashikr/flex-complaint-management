@@ -27,16 +27,23 @@ class RegionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id=-1)
     {
-        $new_id = Region::orderBy('diid', 'desc')->first();
-        if($new_id) {
-            $new_id = $new_id->diid;
-        } else $new_id=0;
-        $new_id++; 
-        $new_id = str_pad($new_id,8,"0", STR_PAD_LEFT);
-
-        return view("region.create", compact('new_id'));
+        if($id == '-1'){
+            $pageTitle = 'Create Region';
+            $new_id = Region::orderBy('diid', 'desc')->first();
+            if($new_id) {
+                $new_id = $new_id->diid;
+            } else $new_id=0;
+            $new_id++; 
+            $new_id = str_pad($new_id,8,"0", STR_PAD_LEFT);
+            $region = new Region;
+            $region->diid = $new_id;
+        }else{
+            $pageTitle = 'Update Region';
+            $region = Region::where('diid', $id)->first();
+        }
+        return view("region.create", compact('pageTitle' ,'region'));
     }
 
     /**
@@ -47,33 +54,30 @@ class RegionController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required',
-            'name' => 'required',
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'diid' => 'required',
+            'diname' => 'required',
             'country' => 'required',
             'city' => 'required',
         ]);
 
         if ($validator->fails()) {    
             return redirect()->route("region.create")
-                            ->withErrors($validator)
+                            ->withErrors('errors', $validator->errors()->first())
                             ->withInput();
         } else {
-            Region::create([
-                'diid' => $request->id,
-                'diname' => $request->name,
-                'location' => $request->location,
-                'distance' => $request->distance,
-                'country' => $request->country,
-                'city' => $request->city,
-                'notes' => $request->notes,
-                'upstatus' => '',
-                'dnstatus' => 'NEW',
-                'usrid' => auth()->user()->id,
-                'bid' => 101
-            ]);
-
-            return redirect()->route("region.index");
+            $data['upstatus'] = '';
+            $data['dnstatus'] = 'CHANGED';
+            $data['usrid'] = auth()->user()->id;
+            $data['bid'] = 101;
+            $result = Region::updateOrCreate(['diid' => $data['diid'] ],$data);
+            $message = trans('messages.update_form',['form' => 'Region']);
+            if($result->wasRecentlyCreated){
+                Region::where('diid', $data['diid'])->update(['dnstatus' => 'NEW']);
+                $message = trans('messages.save_form',['form' => 'Region']);
+            }
+            return redirect(route('region.index'))->withSuccess($message);
         }
     }
 
@@ -96,8 +100,8 @@ class RegionController extends Controller
      */
     public function edit($id)
     {
-        $region = Region::where('diid', $id)->first();
-        return view('region.edit', compact('region'));
+        // $region = Region::where('diid', $id)->first();
+        // return view('region.edit', compact('region'));
     }
 
     /**
@@ -109,32 +113,30 @@ class RegionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'country' => 'required',
-            'city' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required',
+        //     'country' => 'required',
+        //     'city' => 'required',
+        // ]);
 
-        if ($validator->fails()) {    
-            return redirect()->route("region.edit", ['id' => $id])
-                            ->withErrors($validator)
-                            ->withInput();
-        } else {
-            $group = Region::where('diid', $id)->first();
-            $group->update([
-                'diname' => $request->name,
-                'location' => $request->location,
-                'distance' => $request->distance,
-                'country' => $request->country,
-                'city' => $request->city,
-                'notes' => $request->notes,
-                'dnstatus' => 'CHANGED',
-            ]);
+        // if ($validator->fails()) {    
+        //     return redirect()->route("region.edit", ['id' => $id])
+        //                     ->withErrors($validator)
+        //                     ->withInput();
+        // } else {
+        //     $group = Region::where('diid', $id)->first();
+        //     $group->update([
+        //         'diname' => $request->name,
+        //         'location' => $request->location,
+        //         'distance' => $request->distance,
+        //         'country' => $request->country,
+        //         'city' => $request->city,
+        //         'notes' => $request->notes,
+        //         'dnstatus' => 'CHANGED',
+        //     ]);
 
-            return redirect()->route("region.index");
-        }
-        
-
+        //     return redirect()->route("region.index");
+        // }
     }
 
     /**

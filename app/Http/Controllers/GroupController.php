@@ -27,16 +27,23 @@ class GroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id=-1)
     {
-        $new_id = Group::orderBy('crgid', 'desc')->first();
-        if($new_id) {
-            $new_id = $new_id->crgid;
-        } else $new_id=0;
-        $new_id++;
-        $new_id = str_pad($new_id,2,"0", STR_PAD_LEFT);
-
-        return view("group.create", compact('new_id'));
+        if($id == '-1'){
+            $pageTitle = 'Create Group';
+            $new_id = Group::orderBy('crgid', 'desc')->first();
+            if($new_id) {
+                $new_id = $new_id->crgid;
+            } else $new_id=0;
+            $new_id++;
+            $new_id = str_pad($new_id,2,"0", STR_PAD_LEFT);
+            $group = new Group;
+            $group->crgid = $new_id;
+        }else{
+            $pageTitle = 'Update Group';
+            $group = Group::where('crgid', $id)->first();
+        }
+        return view('group.create', compact('pageTitle' ,'group'));
     }
 
     /**
@@ -47,30 +54,31 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|max:2',
-            'name' => 'required',
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'crgid' => 'required|max:2',
+            'crgname' => 'required',
             'description' => 'required',
             'status' => 'required',
         ]);
 
         if ($validator->fails()) {    
             return redirect()->route("group.create")
-                            ->withErrors($validator)
+                            ->with('errors', $validator->errors()->first())
                             ->withInput();
-        } else {
-            Group::create([
-                'crgid' => $request->id,
-                'crgname' => $request->name,
-                'description' => $request->description,
-                'status' => $request->status,
-                'upstatus' => '',
-                'dnstatus' => 'NEW',
-                'usrid' => auth()->user()->id,
-                'bid' => 101
-            ]);
-
-            return redirect()->route("group.index");
+        } else {        
+            $data['upstatus'] = '';
+            $data['dnstatus'] = 'CHANGED';
+            $data['usrid'] = auth()->user()->id;
+            $data['bid'] = 101;
+            $result = Group::updateOrCreate(['crgid' => $data['crgid'] ],$data);
+    
+            $message = trans('messages.update_form',['form' => 'Group']);
+            if($result->wasRecentlyCreated){
+                Group::where('crgid', $data['crgid'])->update(['dnstatus' => 'NEW']);
+                $message = trans('messages.save_form',['form' => 'Group']);
+            }
+            return redirect(route('group.index'))->withSuccess($message);
         }
     }
 

@@ -55,8 +55,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //     Route::get('/delete/{id}', 'GroupController@destroy')->name('group.destroy');
     // });
     Route::resource('group','GroupController')->parameters(['group' => 'id']);
+    Route::get('group/edit/{id}','GroupController@create')->name('group.edit');
+
     Route::resource('admin/group','AdminGroupController',  ['as' => 'admin'])->parameters(['group' => 'id']);
+    Route::get('admin/group/edit/{id}','AdminGroupController@create')->name('admin.group.edit');
     Route::resource('region','RegionController')->parameters(['region' => 'id']);
+    Route::get('region/edit/{id}','RegionController@create')->name('region.edit');
     Route::resource('team','TeamController')->parameters(['team' => 'id']);
+    Route::get('team/edit/{id}','TeamController@create')->name('team.edit');
+    Route::resource('client','ClientController')->parameters(['client' => 'id']);
+    Route::get('client/edit/{id}','ClientController@create')->name('client.edit');
 });
 /// Admin routes end ///
